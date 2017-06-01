@@ -105,18 +105,20 @@ int main(int argc, char *argv[]) {
         parser.showHelp();
     }
 
-    /*
-     * Build the renderer docker image
-     */
-    qDebug() << "Building renderer from " << rendererPath.absolutePath();
-    {
-        QProcess compileRenderer;
+    if (jobs > 0) {
+        /*
+         * Build the renderer docker image
+         */
+        qDebug() << "Building renderer from " << rendererPath.absolutePath();
+        {
+            QProcess compileRenderer;
 
-        compileRenderer.start("docker",
-            QStringList() << "build" << rendererPath.absolutePath() << "-t" << rendererDockerTag);
-        compileRenderer.waitForFinished(-1);
-        if (compileRenderer.exitStatus() != QProcess::NormalExit || compileRenderer.exitCode() != 0) {
-            qFatal("Failed to build hacklily-renderer docker image.");
+            compileRenderer.start("docker",
+                QStringList() << "build" << rendererPath.absolutePath() << "-t" << rendererDockerTag);
+            compileRenderer.waitForFinished(-1);
+            if (compileRenderer.exitStatus() != QProcess::NormalExit || compileRenderer.exitCode() != 0) {
+                qFatal("Failed to build hacklily-renderer docker image.");
+            }
         }
     }
 
